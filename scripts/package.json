@@ -1,11 +1,12 @@
 {
   "name": "scripts",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@solana-mobile-monorepo/config": "workspace:*",
-    "@types/bun": "catalog:",
-    "typescript": "catalog:"
+    "@my-app/config": "*",
+    "@types/bun": "*",
+    "typescript": "*"
   },
   "scripts": {
     "check-types": "tsc --noEmit"

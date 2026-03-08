@@ -1,6 +1,6 @@
 import { useChat } from '@ai-sdk/react'
 import { Ionicons } from '@expo/vector-icons'
-import { env } from '@solana-mobile-monorepo/env/native'
+import { env } from '@my-app/env/native'
 import { DefaultChatTransport } from 'ai'
 import { fetch as expoFetch } from 'expo/fetch'
 import {

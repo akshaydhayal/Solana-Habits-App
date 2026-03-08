@@ -1,6 +1,6 @@
 # Better-T-Stack Project Rules
 
-This is a solana-mobile-monorepo project created with Better-T-Stack CLI.
+This is a my-app project created with Better-T-Stack CLI.
 
 ## Project Structure
 

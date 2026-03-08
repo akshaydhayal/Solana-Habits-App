@@ -1,5 +1,6 @@
 {
-  "name": "@solana-mobile-monorepo/api",
+  "name": "@my-app/api",
+  "version": "0.0.0",
   "type": "module",
   "exports": {
     ".": {
@@ -13,22 +14,22 @@
     "check-types": "tsc -b"
   },
   "dependencies": {
-    "@orpc/client": "catalog:",
-    "@orpc/openapi": "catalog:",
-    "@orpc/server": "catalog:",
-    "@orpc/zod": "catalog:",
-    "@solana-mobile-monorepo/auth": "workspace:*",
-    "@solana-mobile-monorepo/db": "workspace:*",
-    "@solana-mobile-monorepo/env": "workspace:*",
-    "@solana-mobile-monorepo/solana-client": "workspace:*",
-    "@solana/kit": "catalog:",
-    "dotenv": "catalog:",
-    "drizzle-orm": "catalog:",
-    "zod": "catalog:"
+    "@orpc/client": "*",
+    "@orpc/openapi": "*",
+    "@orpc/server": "*",
+    "@orpc/zod": "*",
+    "@my-app/auth": "*",
+    "@my-app/db": "*",
+    "@my-app/env": "*",
+    "@my-app/solana-client": "*",
+    "@solana/kit": "*",
+    "dotenv": "*",
+    "drizzle-orm": "*",
+    "zod": "*"
   },
   "devDependencies": {
-    "@solana-mobile-monorepo/config": "workspace:*",
-    "hono": "catalog:",
-    "typescript": "catalog:"
+    "@my-app/config": "*",
+    "hono": "*",
+    "typescript": "*"
   }
 }

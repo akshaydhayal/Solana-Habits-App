@@ -1,5 +1,5 @@
+import { env } from '@my-app/env/web'
 import { assertIsAddress } from '@solana/kit'
-import { env } from '@solana-mobile-monorepo/env/web'
 import { useMutation } from '@tanstack/react-query'
 import type { UiWallet, UiWalletAccount } from '@wallet-ui/react'
 import { useSignIn } from '@wallet-ui/react'
@@ -20,7 +20,7 @@ export function useHandleSiwsAuthMutation({
   account,
   onError,
   onSuccess,
-  statement = 'Sign in to Solana Mobile Monorepo',
+  statement = 'Sign in to My App',
   wallet,
 }: UseSiwsAuthOptions) {
   if (!account) {

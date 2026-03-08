@@ -1,6 +1,6 @@
 import { expoClient } from '@better-auth/expo/client'
-import { solanaAuthClient } from '@solana-mobile-monorepo/better-auth-solana/client'
-import { env } from '@solana-mobile-monorepo/env/native'
+import { solanaAuthClient } from '@my-app/better-auth-solana/client'
+import { env } from '@my-app/env/native'
 import { createAuthClient } from 'better-auth/react'
 import Constants from 'expo-constants'
 import * as SecureStore from 'expo-secure-store'

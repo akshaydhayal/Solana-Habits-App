@@ -1,8 +1,8 @@
+import type { AppRouterClient } from '@my-app/api/routers/index'
+import { env } from '@my-app/env/native'
 import { createORPCClient } from '@orpc/client'
 import { RPCLink } from '@orpc/client/fetch'
 import { createTanstackQueryUtils } from '@orpc/tanstack-query'
-import type { AppRouterClient } from '@solana-mobile-monorepo/api/routers/index'
-import { env } from '@solana-mobile-monorepo/env/native'
 import { QueryCache, QueryClient } from '@tanstack/react-query'
 import { Platform } from 'react-native'
 

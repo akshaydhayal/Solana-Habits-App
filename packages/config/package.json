@@ -1,5 +1,5 @@
 {
-  "name": "@solana-mobile-monorepo/config",
+  "name": "@my-app/config",
   "version": "0.0.0",
   "private": true,
   "scripts": {

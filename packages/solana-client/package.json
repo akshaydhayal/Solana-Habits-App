@@ -1,18 +1,18 @@
 {
   "dependencies": {
-    "@solana/kit": "catalog:",
-    "@solana/kit-plugin-rpc": "catalog:"
+    "@solana/kit": "*",
+    "@solana/kit-plugin-rpc": "*"
   },
   "devDependencies": {
-    "@types/bun": "catalog:",
-    "@solana-mobile-monorepo/config": "workspace:*",
-    "typescript": "catalog:"
+    "@types/bun": "*",
+    "@my-app/config": "*",
+    "typescript": "*"
   },
   "exports": {
     ".": "./src/index.ts",
     "./*": "./src/*.ts"
   },
-  "name": "@solana-mobile-monorepo/solana-client",
+  "name": "@my-app/solana-client",
   "private": false,
   "scripts": {
     "check-types": "tsc --noEmit"

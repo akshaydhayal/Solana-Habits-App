@@ -1,5 +1,6 @@
 {
-  "name": "@solana-mobile-monorepo/db",
+  "name": "@my-app/db",
+  "version": "0.0.0",
   "type": "module",
   "exports": {
     ".": {
@@ -18,16 +19,16 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
-    "@libsql/client": "catalog:",
-    "@solana-mobile-monorepo/env": "workspace:*",
-    "dotenv": "catalog:",
-    "drizzle-orm": "catalog:",
-    "libsql": "catalog:",
-    "zod": "catalog:"
+    "@libsql/client": "*",
+    "@my-app/env": "*",
+    "dotenv": "*",
+    "drizzle-orm": "*",
+    "libsql": "*",
+    "zod": "*"
   },
   "devDependencies": {
-    "@solana-mobile-monorepo/config": "workspace:*",
+    "@my-app/config": "*",
     "drizzle-kit": "^0.31.8",
-    "typescript": "catalog:"
+    "typescript": "*"
   }
 }

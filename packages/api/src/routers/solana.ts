@@ -1,4 +1,4 @@
-import { getBalance } from '@solana-mobile-monorepo/solana-client'
+import { getBalance } from '@my-app/solana-client'
 import z from 'zod'
 
 import { publicProcedure } from '../index'

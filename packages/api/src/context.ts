@@ -1,6 +1,6 @@
-import { auth } from '@solana-mobile-monorepo/auth'
-import { env } from '@solana-mobile-monorepo/env/server'
-import { createSolanaClient } from '@solana-mobile-monorepo/solana-client'
+import { auth } from '@my-app/auth'
+import { env } from '@my-app/env/server'
+import { createSolanaClient } from '@my-app/solana-client'
 import type { Context as HonoContext } from 'hono'
 
 export type CreateContextOptions = {

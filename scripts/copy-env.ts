@@ -1,15 +1,27 @@
-import { file, Glob, write } from 'bun'
+import fs from 'node:fs'
+import path from 'node:path'
 
-const glob = new Glob('apps/*/.env.example')
+const appsDir = 'apps'
 
-for await (const example of glob.scan('.')) {
-  const envPath = example.replace('.env.example', '.env')
-  const env = file(envPath)
-  const shouldCopy = !(await env.exists()) || env.size === 0
+if (fs.existsSync(appsDir)) {
+  const apps = fs.readdirSync(appsDir)
 
-  if (shouldCopy) {
-    const contents = await file(example).text()
-    await write(envPath, contents)
-    console.log(`Copied ${example} → ${envPath}`)
+  for (const app of apps) {
+    const appPath = path.join(appsDir, app)
+    if (!fs.statSync(appPath).isDirectory()) continue
+
+    const examplePath = path.join(appPath, '.env.example')
+    const envPath = path.join(appPath, '.env')
+
+    if (fs.existsSync(examplePath)) {
+      const shouldCopy =
+        !fs.existsSync(envPath) || fs.statSync(envPath).size === 0
+
+      if (shouldCopy) {
+        const contents = fs.readFileSync(examplePath, 'utf8')
+        fs.writeFileSync(envPath, contents)
+        console.log(`Copied ${examplePath} → ${envPath}`)
+      }
+    }
   }
 }

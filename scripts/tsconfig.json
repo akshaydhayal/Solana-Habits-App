@@ -1,4 +1,4 @@
 {
-  "extends": "@solana-mobile-monorepo/config/tsconfig.base.json",
+  "extends": "@my-app/config/tsconfig.base.json",
   "include": ["*.ts"]
 }

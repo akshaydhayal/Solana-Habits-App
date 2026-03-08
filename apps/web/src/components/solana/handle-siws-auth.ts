@@ -1,13 +1,13 @@
+import type {
+  SolanaAuthNonceResponse,
+  SolanaAuthVerifyResponse,
+} from '@my-app/better-auth-solana/types'
 import {
   type Address,
   assertIsSignature,
   getBase58Decoder,
   type Signature,
 } from '@solana/kit'
-import type {
-  SolanaAuthNonceResponse,
-  SolanaAuthVerifyResponse,
-} from '@solana-mobile-monorepo/better-auth-solana/types'
 import type {
   SolanaSignInInput,
   SolanaSignInOutput,

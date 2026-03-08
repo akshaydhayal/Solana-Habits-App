@@ -1,13 +1,14 @@
 {
   "devDependencies": {
-    "@solana-mobile-monorepo/config": "workspace:*",
+    "@my-app/config": "*",
     "@turbo/gen": "^2.8.3",
-    "typescript": "catalog:"
+    "typescript": "*"
   },
   "name": "generators",
+  "version": "0.0.0",
   "scripts": {
     "check-types": "tsc --noEmit",
-    "test": "bun ./smoke-test.ts"
+    "test": "npm run ./smoke-test.ts"
   },
   "type": "commonjs"
 }

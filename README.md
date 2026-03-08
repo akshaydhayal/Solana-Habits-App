@@ -1,4 +1,4 @@
-# Solana Mobile Monorepo
+# My App
 
 A full-stack starter kit for building mobile apps on Solana. Built with Expo, React Native, and modern TypeScript tooling.
 
@@ -35,7 +35,7 @@ A full-stack starter kit for building mobile apps on Solana. Built with Expo, Re
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/beeman/solana-mobile-monorepo.git my-app
+git clone https://github.com/beeman/my-app.git my-app
 cd my-app
 bun rename
 bun install
@@ -115,7 +115,7 @@ On the emulator, install a wallet app from the Play Store to test wallet connect
 ## Project Structure
 
 ```
-solana-mobile-monorepo/
+my-app/
 ├── apps/
 │   ├── native/      # Mobile app (React Native, Expo)
 │   ├── web/         # Web app (React, TanStack Start)
@@ -136,7 +136,7 @@ Edit `apps/server/.env` to configure the server:
 |--------------------------------|-------------|---------------------------------|
 | `BETTER_AUTH_SECRET`           | Auth secret (min 32 chars). Generate with `openssl rand -hex 32` | —                               |
 | `BETTER_AUTH_URL`              | Server URL for auth callbacks | `http://localhost:3000`         |
-| `CORS_ORIGINS`                 | Comma-separated list of allowed origins for CORS | `http://localhost:3001,solana-mobile-monorepo://`        |
+| `CORS_ORIGINS`                 | Comma-separated list of allowed origins for CORS | `http://localhost:3001,my-app://`        |
 | `DATABASE_URL`                 | Database connection URL | `http://localhost:8080`         |
 | `DATABASE_AUTH_TOKEN`          | Database auth token | `local`                         |
 | `SOLANA_ENDPOINT`              | Solana RPC endpoint | `https://api.devnet.solana.com` |

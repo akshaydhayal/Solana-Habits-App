@@ -25,9 +25,7 @@ export default function Home() {
   return (
     <Container className="space-y-6 p-6">
       <View className="mb-6 py-4">
-        <Text className="mb-2 font-bold text-4xl text-foreground">
-          Solana Mobile Monorepo
-        </Text>
+        <Text className="mb-2 font-bold text-4xl text-foreground">My App</Text>
       </View>
 
       <View className="mb-6">

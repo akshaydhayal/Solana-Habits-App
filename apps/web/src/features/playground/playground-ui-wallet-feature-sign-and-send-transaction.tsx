@@ -1,3 +1,4 @@
+import type { SolanaClient } from '@my-app/solana-client'
 import {
   appendTransactionMessageInstruction,
   assertIsTransactionMessageWithSingleSendingSigner,
@@ -8,7 +9,6 @@ import {
   setTransactionMessageLifetimeUsingBlockhash,
   signAndSendTransactionMessageWithSigners,
 } from '@solana/kit'
-import type { SolanaClient } from '@solana-mobile-monorepo/solana-client'
 import { getAddMemoInstruction } from '@solana-program/memo'
 import type { SolanaClusterId, UiWalletAccount } from '@wallet-ui/react'
 import { useWalletAccountTransactionSendingSigner } from '@wallet-ui/react'

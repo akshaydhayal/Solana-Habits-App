@@ -1,5 +1,5 @@
-import { solanaAuthClient } from '@solana-mobile-monorepo/better-auth-solana/client'
-import { env } from '@solana-mobile-monorepo/env/web'
+import { solanaAuthClient } from '@my-app/better-auth-solana/client'
+import { env } from '@my-app/env/web'
 import { createAuthClient } from 'better-auth/react'
 
 export const authClient = createAuthClient({
