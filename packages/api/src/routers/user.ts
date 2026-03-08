@@ -20,9 +20,12 @@ export const userRouter = {
     )
     .handler(async ({ input, context }) => {
       const userId = parseUserId(context.session.user.id)
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        { name: input.name, dob: input.dob },
+      
+      // Use findOneAndUpdate instead of findByIdAndUpdate to force a strict String query
+      // Better-Auth stores _id as a string, but findById attempts an ObjectId cast if length=24
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: userId },
+        { $set: { name: input.name, dob: input.dob } },
         { new: true }
       )
       
