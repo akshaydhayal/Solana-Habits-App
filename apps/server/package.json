@@ -26,12 +26,12 @@
     "better-auth": "*",
     "dotenv": "*",
     "hono": "*",
-    "zod": "*"
+    "zod": "*",
+    "tsdown": "^0.16.5",
+    "typescript": "*"
   },
   "devDependencies": {
     "@my-app/config": "*",
-    "@types/bun": "*",
-    "tsdown": "^0.16.5",
-    "typescript": "*"
+    "@types/bun": "*"
   }
 }

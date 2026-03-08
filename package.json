@@ -68,15 +68,15 @@
     "zod": "*",
     "expo": "~54.0.33",
     "react": "19.1.0",
-    "react-native": "0.81.5"
+    "react-native": "0.81.5",
+    "turbo": "^2.6.3",
+    "typescript": "*"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",
     "@my-app/config": "*",
     "@types/bun": "*",
-    "lefthook": "^2.0.13",
-    "turbo": "^2.6.3",
-    "typescript": "*"
+    "lefthook": "^2.0.13"
   },
   "packageManager": "npm@10.8.3"
 }
