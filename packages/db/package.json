@@ -11,24 +11,17 @@
     }
   },
   "scripts": {
-    "check-types": "tsc -b",
-    "db:local": "turso dev --db-file local.db",
-    "db:push": "drizzle-kit push",
-    "db:generate": "drizzle-kit generate",
-    "db:studio": "drizzle-kit studio",
-    "db:migrate": "drizzle-kit migrate"
+    "check-types": "tsc -b"
   },
   "dependencies": {
     "@my-app/env": "*",
     "dotenv": "*",
-    "libsql": "*",
     "mongodb": "^7.1.0",
     "mongoose": "^9.2.4",
     "zod": "*"
   },
   "devDependencies": {
     "@my-app/config": "*",
-    "drizzle-kit": "^0.31.8",
     "typescript": "*"
   }
 }
