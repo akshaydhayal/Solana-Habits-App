@@ -23,7 +23,7 @@ const UserSchema = new Schema<IUser>(
     // Custom Fields
     dob: { type: String, default: null },
   },
-  { timestamps: true }
+  { timestamps: true, collection: 'user' }
 )
 
 export const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema)
