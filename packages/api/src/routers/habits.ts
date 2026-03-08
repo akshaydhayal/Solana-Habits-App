@@ -14,8 +14,11 @@ const parseUserId = (id: any): string => {
 export const habitsRouter = {
   getAll: protectedProcedure.handler(async ({ context }) => {
     const userId = parseUserId(context.session.user.id)
-    const habits = await Habit.find({ userId }).sort({ createdAt: -1 })
-    return habits.map(h => h.toJSON())
+    const habits = await Habit.collection
+      .find({ userId })
+      .sort({ createdAt: -1 })
+      .toArray()
+    return habits as any[]
   }),
 
   create: protectedProcedure
@@ -41,12 +44,16 @@ export const habitsRouter = {
     .input(z.object({ id: z.string(), date: z.string(), completed: z.boolean() }))
     .handler(async ({ input, context }) => {
       const userId = parseUserId(context.session.user.id)
-      const habit = await Habit.findOne({ _id: input.id, userId })
+      const habitDoc = await Habit.collection.findOne({ _id: input.id as any, userId })
       
-      if (!habit) {
+      if (!habitDoc) {
         throw new Error('Habit not found')
       }
 
+      // Convert back to mongoose document to use .save() and history logic nicely
+      const habit = new Habit(habitDoc)
+      habit.isNew = false 
+      
       const dayIndex = habit.history.findIndex(h => h.date === input.date)
       
       if (dayIndex >= 0) {
@@ -57,7 +64,12 @@ export const habitsRouter = {
         habit.history.push({ date: input.date, completed: input.completed })
       }
 
-      await habit.save()
+      // We use collection.updateOne to be absolutely sure about the ID matching
+      await Habit.collection.updateOne(
+        { _id: habit._id as any },
+        { $set: { history: habit.history, updatedAt: new Date() } }
+      )
+      
       return habit.toJSON()
     }),
 
@@ -65,7 +77,7 @@ export const habitsRouter = {
     .input(z.object({ id: z.string() }))
     .handler(async ({ input, context }) => {
       const userId = parseUserId(context.session.user.id)
-      await Habit.findOneAndDelete({ _id: input.id, userId })
+      await Habit.collection.findOneAndDelete({ _id: input.id as any, userId })
       return { success: true }
     }),
 }

@@ -20,18 +20,21 @@ export const userRouter = {
     )
     .handler(async ({ input, context }) => {
       const userId = parseUserId(context.session.user.id)
+      console.log('UPDATING PROFILE FOR USER:', userId)
       
-      // Use findOneAndUpdate instead of findByIdAndUpdate to force a strict String query
-      // Better-Auth stores _id as a string, but findById attempts an ObjectId cast if length=24
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: userId },
-        { $set: { name: input.name, dob: input.dob } },
-        { new: true }
+      // Use User.collection to bypass Mongoose's aggressive ObjectId casting 
+      // since better-auth stores 24-char hex strings directly as Strings, not ObjectIds.
+      const result = await User.collection.findOneAndUpdate(
+        { _id: userId as any },
+        { $set: { name: input.name, dob: input.dob, updatedAt: new Date() } },
+        { returnDocument: 'after' }
       )
       
-      if (!updatedUser) {
+      console.log('Query Result:', result)
+      
+      if (!result) {
         throw new Error('User not found in database')
       }
-      return updatedUser.toJSON()
+      return result as any
     }),
 }

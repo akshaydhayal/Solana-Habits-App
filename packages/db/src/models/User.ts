@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose'
 
-export interface IUser extends Document {
+export interface IUser extends Omit<Document, '_id'> {
   _id: string; // From better-auth
   name: string;
   email: string | null;

@@ -5,7 +5,8 @@ export interface IHabitDay {
   completed: boolean;
 }
 
-export interface IHabit extends Document {
+export interface IHabit extends Omit<Document, '_id'> {
+  _id: string;
   userId: string;
   name: string;
   description?: string;
