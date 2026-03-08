@@ -5,9 +5,9 @@ export interface IHabitDay {
   completed: boolean;
 }
 
-export interface IHabit extends Omit<Document, '_id'> {
-  _id: string;
-  userId: string;
+export interface IHabit extends Document {
+  _id: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
   name: string;
   description?: string;
   frequency: string[]; // e.g. ['Mon', 'Tue'] or ['Daily']
@@ -19,7 +19,7 @@ export interface IHabit extends Omit<Document, '_id'> {
 
 const HabitSchema = new Schema<IHabit>(
   {
-    userId: { type: String, required: true, ref: 'User' },
+    userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
     name: { type: String, required: true },
     description: { type: String },
     frequency: { type: [String], default: ['Daily'] },

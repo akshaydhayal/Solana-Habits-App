@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose'
 
-export interface IUser extends Omit<Document, '_id'> {
-  _id: string; // From better-auth
+export interface IUser extends Document {
+  _id: mongoose.Types.ObjectId;
   name: string;
   email: string | null;
   emailVerified: boolean;
@@ -13,7 +13,7 @@ export interface IUser extends Omit<Document, '_id'> {
 
 const UserSchema = new Schema<IUser>(
   {
-    _id: { type: String, required: true },
+    _id: { type: Schema.Types.ObjectId, auto: true },
     name: { type: String, required: true },
     email: { type: String, default: null },
     emailVerified: { type: Boolean, default: false },
