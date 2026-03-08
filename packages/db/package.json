@@ -19,11 +19,11 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
-    "@libsql/client": "*",
     "@my-app/env": "*",
     "dotenv": "*",
-    "drizzle-orm": "*",
     "libsql": "*",
+    "mongodb": "^7.1.0",
+    "mongoose": "^9.2.4",
     "zod": "*"
   },
   "devDependencies": {

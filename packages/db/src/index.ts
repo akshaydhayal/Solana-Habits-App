@@ -1,12 +1,25 @@
-import { createClient } from '@libsql/client'
+import { MongoClient } from 'mongodb'
+import mongoose from 'mongoose'
 import { env } from '@my-app/env/server'
-import { drizzle } from 'drizzle-orm/libsql'
 
-import * as schema from './schema'
+// Mongoose connection logic for explicit schema usage
+let isConnected = false
 
-const client = createClient({
-  url: env.DATABASE_URL,
-  authToken: env.DATABASE_AUTH_TOKEN,
-})
+export const connectDB = async () => {
+  if (isConnected) return
+  try {
+    const db = await mongoose.connect(env.DATABASE_URL)
+    isConnected = db.connections[0]?.readyState === 1
+    console.log('✅ MongoDB Connected')
+  } catch (error) {
+    console.error('❌ MongoDB Connection Error:', error)
+  }
+}
 
-export const db = drizzle({ client, schema })
+// Native MongoDB client for better-auth
+const client = new MongoClient(env.DATABASE_URL)
+export const mongoDb = client.db()
+
+// Export all Mongoose schemas
+export * from './models/User'
+export * from './models/Habit'

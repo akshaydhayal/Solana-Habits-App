@@ -1,17 +1,20 @@
 import { expo } from '@better-auth/expo'
 import { solanaAuth } from '@my-app/better-auth-solana'
-import { db } from '@my-app/db'
-import * as schema from '@my-app/db/schema/auth'
+import { mongoDb } from '@my-app/db'
 import { env } from '@my-app/env/server'
 import { betterAuth } from 'better-auth'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { mongodbAdapter } from 'better-auth/adapters/mongodb'
 
 export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: 'sqlite',
-
-    schema: schema,
-  }),
+  database: mongodbAdapter(mongoDb),
+  user: {
+    additionalFields: {
+      dob: {
+        type: 'string',
+        required: false,
+      },
+    },
+  },
   trustedOrigins: [
     ...env.CORS_ORIGINS,
     ...(env.NODE_ENV === 'development'

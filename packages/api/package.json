@@ -14,17 +14,16 @@
     "check-types": "tsc -b"
   },
   "dependencies": {
-    "@orpc/client": "*",
-    "@orpc/openapi": "*",
-    "@orpc/server": "*",
-    "@orpc/zod": "*",
     "@my-app/auth": "*",
     "@my-app/db": "*",
     "@my-app/env": "*",
     "@my-app/solana-client": "*",
+    "@orpc/client": "*",
+    "@orpc/openapi": "*",
+    "@orpc/server": "*",
+    "@orpc/zod": "*",
     "@solana/kit": "*",
     "dotenv": "*",
-    "drizzle-orm": "*",
     "zod": "*"
   },
   "devDependencies": {

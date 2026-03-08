@@ -10,8 +10,7 @@ export const env = createEnv({
       .string()
       .transform((val) => val.split(',').map((url) => url.trim()))
       .pipe(z.array(z.url())),
-    DATABASE_AUTH_TOKEN: z.string().min(1),
-    DATABASE_URL: z.string().min(1),
+    DATABASE_URL: z.string().url().startsWith('mongodb'),
     NODE_ENV: z
       .enum(['development', 'production', 'test'])
       .default('development'),

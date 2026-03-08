@@ -74,17 +74,17 @@ function DrawerLayout() {
         }}
       />
       <Drawer.Screen
-        name="todos"
+        name="habits"
         options={{
-          headerTitle: 'Todos',
+          headerTitle: 'Habits',
           drawerLabel: ({ color, focused }) => (
             <Text style={{ color: focused ? color : themeColorForeground }}>
-              Todos
+              Habits
             </Text>
           ),
           drawerIcon: ({ size, color, focused }) => (
             <Ionicons
-              name="checkbox-outline"
+              name="calendar-clear-outline"
               size={size}
               color={focused ? color : themeColorForeground}
             />

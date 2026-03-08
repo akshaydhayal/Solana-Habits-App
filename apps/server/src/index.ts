@@ -22,6 +22,8 @@ console.log(`  SOLANA_ENDPOINT: ${new URL(env.SOLANA_ENDPOINT).origin}`)
 console.log(`  SOLANA_EMAIL_DOMAIN: ${env.SOLANA_EMAIL_DOMAIN}`)
 console.log(`  NODE_ENV: ${env.NODE_ENV}`)
 
+import { connectDB } from '@my-app/db'
+connectDB()
 const app = new Hono()
 
 app.use(logger())
@@ -97,4 +99,14 @@ app.get('/', (c) => {
   return c.text('OK')
 })
 
+import { serve } from '@hono/node-server'
+
+const port = Number(env.PORT || 3000)
+console.log(`📡 Hono node-server starting on port ${port}...`)
+serve({
+  fetch: app.fetch,
+  port
+})
+
 export default app
+

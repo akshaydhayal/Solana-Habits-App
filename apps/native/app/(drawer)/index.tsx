@@ -8,6 +8,7 @@ import { SignIn } from '@/components/sign-in'
 import { SignUp } from '@/components/sign-up'
 import { SolanaConnect } from '@/components/solana-connect'
 import { SolanaSignInButton } from '@/components/solana-sign-in-button'
+import { UserOnboarding } from '@/components/user-onboarding'
 import { authClient } from '@/lib/auth-client'
 import { orpc, queryClient } from '@/utils/orpc'
 
@@ -22,6 +23,8 @@ export default function Home() {
   const successColor = useThemeColor('success')
   const dangerColor = useThemeColor('danger')
 
+  const needsOnboarding = session?.user && !(session.user as any).dob
+
   return (
     <Container className="space-y-6 p-6">
       <View className="mb-6 py-4">
@@ -32,7 +35,11 @@ export default function Home() {
         <SolanaConnect />
       </View>
 
-      {session?.user ? (
+      {needsOnboarding ? (
+        <View className="mb-6">
+          <UserOnboarding defaultName={session.user.name} />
+        </View>
+      ) : session?.user ? (
         <Card variant="secondary" className="mb-6 p-4">
           <Text className="mb-2 text-base text-foreground">
             Welcome, <Text className="font-medium">{session.user.name}</Text>
