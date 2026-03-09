@@ -131,55 +131,66 @@ export const solanaAuth = (options: SolanaAuthOptions): BetterAuthPlugin => {
 
           // Find or create user
           const adapter = ctx.context.adapter
+          const internal = ctx.context.internalAdapter
 
           // Check if wallet is already linked to a user
           console.log(`[SolanaAuth] Checking wallet: ${walletAddress} (cluster: ${cluster})`)
-          const result = await adapter.findOne({
+          const walletRecord = await adapter.findOne({
             model: 'walletAddress',
             where: [
               { field: 'address', value: walletAddress },
               { field: 'cluster', value: cluster },
             ],
           })
-          console.log(`[SolanaAuth] Lookup Result: ${result ? 'Found' : 'NOT Found'}`)
-
-          const walletSchema = z.object({
-            userId: z.string(),
-            address: z.string(),
-            cluster: z.string(),
-          })
-
-          const existingWallet = result ? walletSchema.parse(result) : null
-
+          
+          let user: any = null
           let isNewUser = false
-          let user: Awaited<
-            ReturnType<typeof ctx.context.internalAdapter.findUserById>
-          >
+          const generatedEmail = email || `${walletAddress}@${emailDomainName}`
 
-          if (existingWallet) {
-            // Get existing user
-            const existingUser = await ctx.context.internalAdapter.findUserById(
-              existingWallet.userId,
-            )
-            if (!existingUser) {
-              throw new APIError('INTERNAL_SERVER_ERROR', {
-                message: 'User not found for wallet',
+          if (walletRecord) {
+            const userId = (walletRecord as any).userId
+            console.log(`[SolanaAuth] Wallet link found. userId: ${userId}`)
+            user = await internal.findUserById(userId)
+            if (user) {
+              console.log(`[SolanaAuth] Linked user found: ${user.id}`)
+            } else {
+              console.warn(`[SolanaAuth] Wallet points to user ${userId} but user record is missing!`)
+            }
+          }
+
+          // Fallback: Check by email to prevent duplicate accounts
+          if (!user) {
+            console.log(`[SolanaAuth] Searching for user by email: ${generatedEmail}`)
+            user = await internal.findUserByEmail(generatedEmail)
+            if (user) {
+              console.log(`[SolanaAuth] Found existing user by email: ${user.id}. Linking wallet...`)
+              // Link this wallet to the existing user
+              await adapter.create({
+                model: 'walletAddress',
+                data: {
+                  id: crypto.randomUUID(),
+                  userId: user.id,
+                  address: walletAddress,
+                  cluster,
+                  isPrimary: true,
+                  createdAt: new Date(),
+                },
               })
             }
-            user = existingUser
-          } else {
-            // Create new user
-            isNewUser = true
-            const generatedEmail =
-              email || `${walletAddress}@${emailDomainName}`
+          }
 
-            user = await ctx.context.internalAdapter.createUser({
+          if (!user) {
+            // Create new user
+            console.log(`[SolanaAuth] No existing user found. Creating new user for ${generatedEmail}`)
+            isNewUser = true
+            user = await internal.createUser({
               email: generatedEmail,
-              emailVerified: !email, // Auto-verify generated emails
+              emailVerified: !email,
               name: walletAddress.slice(0, 8),
             })
+            console.log(`[SolanaAuth] Created new user: ${user.id}`)
 
-            // Create wallet address record
+            // Link wallet
             await adapter.create({
               model: 'walletAddress',
               data: {

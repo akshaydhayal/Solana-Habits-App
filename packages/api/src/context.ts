@@ -83,7 +83,9 @@ export async function createContext({ context }: CreateContextOptions) {
           })
 
           if (!userRecord) {
+            const allUsers = await mongoDb.collection('user').find().toArray()
             console.log(`[Context] Rescue Failed: Session found for user ${sessionRecord.userId}, but user record is missing in '${mongoDb.databaseName}.user'!`)
+            console.log(`[Context] Available Users (${allUsers.length}): ${allUsers.map(u => u._id.toString()).join(', ')}`)
           } else {
             console.log(`[Context] Rescue SUCCESS! Manually authenticated: ${userRecord.name || userRecord._id}`)
             session = {
