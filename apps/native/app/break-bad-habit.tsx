@@ -59,6 +59,15 @@ export default function BreakBadHabitScreen() {
             <Pressable
               key={item.id}
               style={{ width: CARD_WIDTH, height: CARD_WIDTH * 1.2 }}
+              onPress={() => router.push({
+                pathname: '/habit-config',
+                params: { 
+                  name: item.title, 
+                  color: item.color, 
+                  icon: item.icon,
+                  type: 'bad'
+                }
+              })}
               className="rounded-2xl overflow-hidden p-4 relative"
             >
                <View 

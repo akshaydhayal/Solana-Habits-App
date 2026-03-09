@@ -26,6 +26,12 @@ export const habitsRouter = {
       z.object({
         name: z.string().min(1),
         description: z.string().optional(),
+        type: z.enum(['good', 'bad']).default('good'),
+        badHabitType: z.enum(['stop', 'limit']).optional(),
+        goalValue: z.number().optional(),
+        goalUnit: z.string().optional(),
+        goalFrequency: z.string().optional(),
+        startDate: z.string(), // YYYY-MM-DD
         frequency: z.array(z.string()).default(['Daily']),
         color: z.string().optional(),
       })

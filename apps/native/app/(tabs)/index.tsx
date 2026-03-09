@@ -43,11 +43,14 @@ export default function JournalScreen() {
     })
   ).current
 
-  const negativeHabits = habits?.filter(h => 
+  const visibleHabits = habits?.filter(h => h.startDate <= selectedDate) || []
+  
+  const negativeHabits = visibleHabits.filter(h => 
+    h.type === 'bad' || 
     h.name.toLowerCase().startsWith('limit') || 
     h.name.toLowerCase().startsWith('stop')
-  ) || []
-  const goodHabits = habits?.filter(h => !negativeHabits.find(nh => nh._id === h._id)) || []
+  )
+  const goodHabits = visibleHabits.filter(h => h.type === 'good' && !negativeHabits.find(nh => nh._id === h._id))
 
   return (
     <SafeAreaView className="flex-1 bg-[#0A0A0A]">
@@ -119,7 +122,7 @@ export default function JournalScreen() {
            {goodHabits.length > 0 ? (
              <View>
                 {goodHabits.map((h) => (
-                  <View key={h._id} className="flex-row items-center gap-3 mb-6">
+                  <View key={String(h._id)} className="flex-row items-center gap-3 mb-6">
                     <View 
                       style={{ backgroundColor: `${h.color || '#3b82f6'}15`, borderColor: `${h.color || '#3b82f6'}30` }}
                       className="h-10 w-10 rounded-full items-center justify-center border"
@@ -137,8 +140,8 @@ export default function JournalScreen() {
                   </View>
                 ))}
              </View>
-           ) : !isLoading && (
-             <Text className="text-gray-500 text-center py-4">No good habits yet</Text>
+           ) : !isLoading && selectedDate === new Date().toISOString().split('T')[0] && (
+             <Text className="text-gray-500 text-center py-4">No good habits for today</Text>
            )}
 
            {negativeHabits.length > 0 && (
@@ -148,17 +151,19 @@ export default function JournalScreen() {
                   <Ionicons name="chevron-up" size={20} color="#71717a" />
                </View>
 
-                {negativeHabits.map((h) => (
-                 <View key={h._id} className="flex-row items-center gap-3 mb-6 opacity-80">
+               {negativeHabits.map((h) => (
+                 <View key={String(h._id)} className="flex-row items-center gap-3 mb-6 opacity-80">
                     <View 
                       style={{ backgroundColor: `${h.color || '#FF9500'}15`, borderColor: `${h.color || '#FF9500'}30` }}
                       className="h-10 w-10 rounded-full items-center justify-center border"
                     >
-                       <Ionicons name="ban" size={20} color={h.color || '#FF9500'} />
+                       <Ionicons name={h.badHabitType === 'stop' ? "ban" : "arrow-down"} size={20} color={h.color || '#FF9500'} />
                     </View>
                     <View className="flex-1">
                        <Text className="text-white font-bold text-lg">{h.name}</Text>
-                       <Text className="text-[#71717a] text-sm">0/1 {h.frequency?.join(', ')}</Text>
+                       <Text className="text-[#71717a] text-sm">
+                         {h.badHabitType === 'stop' ? 'Quit this habit' : `0/${h.goalValue} ${h.goalUnit} ${h.goalFrequency}`}
+                       </Text>
                     </View>
                     <Pressable className="flex-row items-center gap-2 border border-white rounded-full px-4 py-2">
                        <Ionicons name="checkmark" size={18} color="white" />

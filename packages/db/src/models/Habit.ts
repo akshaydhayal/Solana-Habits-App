@@ -10,6 +10,12 @@ export interface IHabit extends Document {
   userId: mongoose.Types.ObjectId;
   name: string;
   description?: string;
+  type: 'good' | 'bad';
+  badHabitType?: 'stop' | 'limit';
+  goalValue?: number;
+  goalUnit?: string;
+  goalFrequency?: string;
+  startDate: string; // YYYY-MM-DD
   frequency: string[]; // e.g. ['Mon', 'Tue'] or ['Daily']
   color?: string;
   history: IHabitDay[];
@@ -22,8 +28,14 @@ const HabitSchema = new Schema<IHabit>(
     userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
     name: { type: String, required: true },
     description: { type: String },
+    type: { type: String, enum: ['good', 'bad'], default: 'good' },
+    badHabitType: { type: String, enum: ['stop', 'limit'] },
+    goalValue: { type: Number },
+    goalUnit: { type: String },
+    goalFrequency: { type: String },
+    startDate: { type: String, required: true },
     frequency: { type: [String], default: ['Daily'] },
-    color: { type: String, default: '#4CAF50' },
+    color: { type: String, default: '#3b82f6' },
     history: [
       {
         date: { type: String, required: true },
