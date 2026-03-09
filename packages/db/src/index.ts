@@ -18,6 +18,7 @@ export const connectDB = async () => {
 
 // Native MongoDB client for better-auth
 const client = new MongoClient(env.DATABASE_URL)
+await client.connect()
 export const mongoDb = client.db()
 
 // Export all Mongoose schemas
