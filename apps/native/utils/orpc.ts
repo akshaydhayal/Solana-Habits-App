@@ -81,12 +81,17 @@ export const link = new RPCLink({
       console.warn('[ORPC] Failed to retrieve session headers', e)
     }
 
-    // CRITICAL: Must be strictly aligned with trustedOrigins
     headers.set('expo-origin', 'my-app://')
     headers.set('Origin', 'my-app://')
     headers.set('x-skip-oauth-proxy', 'true')
 
-    return Object.fromEntries(headers)
+    const result = Object.fromEntries(headers)
+    console.log('[ORPC] Sending Headers:', JSON.stringify({
+      ...result,
+      Authorization: result.Authorization ? result.Authorization.substring(0, 15) + '...' : 'none',
+      Cookie: result.Cookie ? result.Cookie.substring(0, 15) + '...' : 'none'
+    }))
+    return result
   },
 })
 

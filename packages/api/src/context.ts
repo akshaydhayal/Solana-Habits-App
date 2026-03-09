@@ -36,13 +36,23 @@ export async function createContext({ context }: CreateContextOptions) {
   // MANUAL TOKEN RESCUE
   // If getSession fails but we HAVE an Authorization header, try to manually find the session
   if (!session && authHeader?.startsWith('Bearer ')) {
-    const tokenValue = authHeader.split(' ')[1]
-    console.log(`[Context] getSession failed. Attempting Rescue for token: ${tokenValue?.substring(0, 5)}...`)
+    const tokenValue = authHeader.split(' ')[1]?.trim()
+    console.log(`[Context] getSession failed. DB: ${mongoDb.databaseName}. Attempting Rescue for token: ${tokenValue?.substring(0, 5)}...`)
     
     try {
       if (tokenValue) {
+        const sessionCol = mongoDb.collection('session')
+        const allSessions = await sessionCol.find().toArray()
+        console.log(`[Context] Debug: Total sessions in '${mongoDb.databaseName}.session': ${allSessions.length}`)
+        
+        if (allSessions.length > 0) {
+          const first = allSessions[0]
+          const sampleToken = first?.token || first?.sessionToken
+          console.log(`[Context] Debug: Sample DB Token (last 5): ${sampleToken ? sampleToken.substring(sampleToken.length - 5) : 'none'}`)
+        }
+
         // 1. Find session record - try both common field names
-        const sessionRecord = await mongoDb.collection('session').findOne({ 
+        const sessionRecord = await sessionCol.findOne({ 
           $or: [
             { sessionToken: tokenValue }, 
             { token: tokenValue }
@@ -50,7 +60,7 @@ export async function createContext({ context }: CreateContextOptions) {
         })
         
         if (!sessionRecord) {
-          console.log('[Context] Rescue Failed: No session found in DB for this token.')
+          console.log(`[Context] Rescue Failed: No match found among ${allSessions.length} records.`)
         } else if (new Date(sessionRecord.expiresAt) < new Date()) {
           console.log('[Context] Rescue Failed: Session found but expired.')
         } else {
@@ -63,7 +73,7 @@ export async function createContext({ context }: CreateContextOptions) {
           })
 
           if (!userRecord) {
-            console.log(`[Context] Rescue Failed: Session found for user ${sessionRecord.userId}, but user record is missing!`)
+            console.log(`[Context] Rescue Failed: Session found for user ${sessionRecord.userId}, but user record is missing in '${mongoDb.databaseName}.user'!`)
           } else {
             console.log(`[Context] Rescue SUCCESS! Manually authenticated: ${userRecord.name || userRecord._id}`)
             session = {
