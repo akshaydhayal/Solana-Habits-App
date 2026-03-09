@@ -6,15 +6,28 @@
     "web": {
       "bundler": "metro"
     },
-    "name": "my-app",
-    "slug": "my-app",
-    "plugins": ["expo-font"],
+    "name": "HabitGo",
+    "slug": "habit-go",
+    "version": "1.0.0",
+    "icon": "./assets/logo2.png",
+    "plugins": [
+      "expo-font",
+      "expo-router"
+    ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
     },
     "android": {
-      "package": "com.anonymous.myapp"
+      "package": "com.akshaydhayal.habitgo",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo2.png",
+        "backgroundColor": "#0A0A0A"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.akshaydhayal.habitgo",
+      "supportsTablet": true
     }
   }
 }
