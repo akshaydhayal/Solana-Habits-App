@@ -1,6 +1,8 @@
 import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
 import { useQuery } from '@tanstack/react-query'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import * as SecureStore from 'expo-secure-store'
 import {
   ScrollView,
   Text,
@@ -41,6 +43,27 @@ export default function JournalScreen() {
   const { data: session } = authClient.useSession()
   const scrollRef = useRef<ScrollView>(null)
   const insets = useSafeAreaInsets()
+  const router = useRouter()
+
+  const [isHabitInfoVisible, setIsHabitInfoVisible] = useState(false)
+  const [isSwipeTipVisible, setIsSwipeTipVisible] = useState(true)
+
+  useEffect(() => {
+    const checkPersistence = async () => {
+      const today = toLocalISOString(new Date())
+      const lastDismissed = await SecureStore.getItemAsync('habit_info_dismissed_date')
+      if (lastDismissed !== today) {
+        setIsHabitInfoVisible(true)
+      }
+    }
+    checkPersistence()
+  }, [])
+
+  const handleDismissHabitInfo = async () => {
+    const today = toLocalISOString(new Date())
+    await SecureStore.setItemAsync('habit_info_dismissed_date', today)
+    setIsHabitInfoVisible(false)
+  }
 
   const dates = useRef(
     Array.from({ length: 30 }, (_, i) => {
@@ -65,7 +88,11 @@ export default function JournalScreen() {
 
   return (
     <View style={{ paddingTop: insets.top }} className="flex-1 bg-[#0A0A0A]">
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        className="flex-1" 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 180 }}
+      >
         <View className="px-5 pt-8 mb-6">
           <Text className="text-[#71717a] text-[11px] font-bold tracking-widest uppercase mb-1">
             TODAY
@@ -116,17 +143,19 @@ export default function JournalScreen() {
         </ScrollView>
 
         {/* Info Card */}
-        <View className="px-5 mb-8">
-          <View className="bg-[#1C1C1E] rounded-xl p-4 flex-row gap-3 relative border border-white/5">
-            <Ionicons name="information-circle" size={20} color="#71717a" />
-            <Text className="flex-1 text-gray-400 text-[13px] leading-5 pr-4">
-              When the day has passed and the log value is zero or below the limit, a bad habit will automatically be marked a success.
-            </Text>
-            <Pressable className="absolute top-2 right-2">
-              <Ionicons name="close" size={18} color="#71717a" />
-            </Pressable>
+        {isHabitInfoVisible && (
+          <View className="px-5 mb-8">
+            <View className="bg-[#1C1C1E] rounded-xl p-4 flex-row gap-3 relative border border-white/5">
+              <Ionicons name="information-circle" size={20} color="#71717a" />
+              <Text className="flex-1 text-gray-400 text-[13px] leading-5 pr-4">
+                When the day has passed and the log value is zero or below the limit, a bad habit will automatically be marked a success.
+              </Text>
+              <Pressable className="absolute top-2 right-2" onPress={handleDismissHabitInfo}>
+                <Ionicons name="close" size={18} color="#71717a" />
+              </Pressable>
+            </View>
           </View>
-        </View>
+        )}
 
         {/* Habit List */}
         <View className="px-5 gap-8">
@@ -198,11 +227,11 @@ export default function JournalScreen() {
                  onPress={() => router.push({
                    pathname: '/mood-detail',
                    params: {
-                     mood: m.mood,
-                     date: m.date,
-                     time: m.time,
-                     activities: m.activities.join(','),
-                     context: m.context
+                     mood: m.mood || '',
+                     date: m.date || '',
+                     time: m.time || '',
+                     activities: (m.activities || []).join(','),
+                     context: m.context || ''
                    }
                  })}
                  className="flex-row items-center gap-3 mb-6"
@@ -222,53 +251,66 @@ export default function JournalScreen() {
            </View>
 
           {/* Swipe Tip Card */}
-          <View className="bg-[#1C1C1E] rounded-xl p-5 border border-white/5 mb-28">
-             <View className="flex-row justify-between mb-2">
-                <Text className="text-white font-bold text-lg">Quick Actions with Swipes</Text>
-                <Ionicons name="close" size={20} color="#71717a" />
-             </View>
-             <View className="flex-row gap-4 items-center">
-                <Ionicons name="hand-right" size={32} color="#71717a" />
-                <Text className="flex-1 text-gray-400 leading-5">
-                   Swipe left to complete or log your habit. Swipe right to skip, mark as failed, or add a note
-                </Text>
-             </View>
-             <Text className="text-[#3b82f6] font-bold mt-4">Quick Actions with Swipes</Text>
-          </View>
+          {isSwipeTipVisible && (
+            <View className="bg-[#1C1C1E] rounded-xl p-5 border border-white/5 mb-28">
+               <View className="flex-row justify-between mb-2">
+                  <Text className="text-white font-bold text-lg">Quick Actions with Swipes</Text>
+                  <Pressable onPress={() => setIsSwipeTipVisible(false)}>
+                    <Ionicons name="close" size={20} color="#71717a" />
+                  </Pressable>
+               </View>
+               <View className="flex-row gap-4 items-center">
+                  <Ionicons name="hand-right" size={32} color="#71717a" />
+                  <Text className="flex-1 text-gray-400 leading-5">
+                     Swipe left to complete or log your habit. Swipe right to skip, mark as failed, or add a note
+                  </Text>
+               </View>
+               {/* <Text className="text-[#3b82f6] font-bold mt-4">Quick Actions with Swipes</Text> */}
+            </View>
+          )}
         </View>
       </ScrollView>
 
       {/* Footer Date Strip and FAB */}
-      <View className="absolute bottom-4 left-0 right-0 px-5 flex-row items-center justify-between">
-         <View className="flex-1 mr-4 bg-zinc-900/90 backdrop-blur-xl rounded-2xl border border-white/5 overflow-hidden">
+      <View 
+        style={{ bottom: 0 }}
+        className="absolute left-0 right-0 bg-[#0A0A0A] border-t border-white/5 flex-row items-center py-2"
+      >
+         <View className="flex-1">
             <ScrollView 
               horizontal 
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingHorizontal: 10, paddingVertical: 12, gap: 10 }}
+              contentContainerStyle={{ paddingHorizontal: 15, gap: 10 }}
               ref={scrollRef}
               onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: false })}
             >
-               {dates.map((d, i) => (
-                 <Pressable 
-                   key={i} 
-                   onPress={() => setSelectedDate(d.fullDate)}
-                   className={`items-center px-4 py-1.5 rounded-xl ${selectedDate === d.fullDate ? 'bg-zinc-800 border border-white/10' : ''}`}
-                 >
-                   <Text className={`text-[10px] mb-1 font-bold ${selectedDate === d.fullDate ? 'text-[#3b82f6]' : 'text-[#71717a]'}`}>
-                     {d.day}
-                   </Text>
-                   <Text className={`text-base font-bold ${selectedDate === d.fullDate ? 'text-white' : 'text-[#71717a]'}`}>
-                     {d.date}
-                   </Text>
-                 </Pressable>
-               ))}
+               {dates.map((d, i) => {
+                 const isSelected = selectedDate === d.fullDate
+                 return (
+                   <Pressable 
+                     key={i} 
+                     onPress={() => setSelectedDate(d.fullDate)}
+                     className={`items-center px-4 py-2 rounded-xl ${isSelected ? 'bg-zinc-700' : ''}`}
+                   >
+                     <Text className={`text-[10px] mb-1 font-bold ${isSelected ? 'text-gray-300' : 'text-[#71717a]'}`}>
+                       {d.day}
+                     </Text>
+                     <Text className={`text-base font-bold ${isSelected ? 'text-white' : 'text-[#71717a]'}`}>
+                       {d.date}
+                     </Text>
+                   </Pressable>
+                 )
+               })}
             </ScrollView>
          </View>
+         
+         <View className="h-10 w-[1px] bg-white/10 mx-2" />
+         
          <Pressable 
            onPress={() => setIsActionSheetVisible(true)}
-           className="h-16 w-16 bg-[#3b82f6] rounded-full items-center justify-center shadow-xl shadow-[#3b82f6]/40"
+           className="h-12 w-12 bg-blue-600 rounded-full items-center justify-center mr-4 shadow-xl shadow-[#3b82f6]/40"
          >
-            <Ionicons name="add" size={40} color="white" />
+            <Ionicons name="add" size={32} color="white" />
          </Pressable>
       </View>
 

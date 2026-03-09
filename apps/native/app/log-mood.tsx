@@ -25,7 +25,7 @@ const MOODS = [
 ]
 
 const ACTIVITIES = [
-  'Family', 'Friends', 'Love', 'Work', 'School', 'Health', 'Exercise', 'Food', 'Sleep', 'Hobby'
+  'Family', 'Friends', 'Love', 'Work', 'School', 'Health'
 ]
 
 export default function LogMoodScreen() {
@@ -88,7 +88,7 @@ export default function LogMoodScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Text className="text-white text-xl font-bold mb-6">How do you feel right now?</Text>
+            <Text className="text-white text-xl font-bold mb-4">How do you feel right now?</Text>
             
             <View className="flex-row justify-between mb-8">
               {MOODS.map((m) => {
@@ -102,7 +102,7 @@ export default function LogMoodScreen() {
                     <View className={`h-16 w-16 rounded-full items-center justify-center ${isSelected ? 'bg-blue-600' : 'bg-transparent'}`}>
                        <Text style={{ fontSize: 32 }}>{m.emoji}</Text>
                     </View>
-                    <Text className={`text-[10px] font-medium ${isSelected ? 'text-blue-400' : 'text-gray-500'}`}>
+                    <Text className={`text-[10px] font-medium ${isSelected ? 'text-blue-400' : 'text-gray-300'}`}>
                       {m.label}
                     </Text>
                   </Pressable>
@@ -110,7 +110,7 @@ export default function LogMoodScreen() {
               })}
             </View>
 
-            <Text className="text-white text-xl font-bold mb-6">What have you been up to?</Text>
+            <Text className="text-white text-xl font-bold mb-2">What have you been up to?</Text>
             
             <View className="flex-row flex-wrap gap-3 mb-8">
               {ACTIVITIES.map((a) => {
@@ -119,7 +119,7 @@ export default function LogMoodScreen() {
                   <Pressable 
                     key={a}
                     onPress={() => toggleActivity(a)}
-                    className={`px-6 py-3 rounded-full ${isSelected ? 'bg-blue-600' : 'bg-zinc-800'}`}
+                    className={`px-6 py-2 rounded-full ${isSelected ? 'bg-blue-600' : 'bg-zinc-700'}`}
                   >
                     <Text className="text-white font-medium">{a}</Text>
                   </Pressable>
@@ -127,12 +127,12 @@ export default function LogMoodScreen() {
               })}
             </View>
 
-            <Text className="text-white text-xl font-bold mb-4">Additional context</Text>
+            <Text className="text-white text-xl font-bold mb-2">Additional context</Text>
             <TextInput
               multiline
               placeholder="Add some notes..."
-              placeholderTextColor="#71717a"
-              className="bg-zinc-800 rounded-xl p-4 text-white min-h-[100px] mb-8"
+              placeholderTextColor="#9f9fa9ff"
+              className="bg-zinc-700 rounded-xl p-4 text-white mb-4"
               value={context}
               onChangeText={setContext}
             />
@@ -140,7 +140,7 @@ export default function LogMoodScreen() {
             <Pressable 
               onPress={handleSave}
               disabled={createMoodMutation.isPending}
-              className={`bg-blue-600 h-16 rounded-3xl items-center justify-center ${createMoodMutation.isPending ? 'opacity-50' : ''}`}
+              className={`bg-blue-700 h-13 rounded-3xl items-center justify-center ${createMoodMutation.isPending ? 'opacity-50' : ''}`}
             >
               <Text className="text-white text-xl font-bold">Save</Text>
             </Pressable>

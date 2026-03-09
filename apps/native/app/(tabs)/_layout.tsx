@@ -1,6 +1,12 @@
 import { Ionicons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
-import { View } from 'react-native'
+import {
+  ScrollView,
+  Text,
+  View,
+  Pressable,
+  Dimensions,
+} from 'react-native'
 import { useThemeColor } from 'heroui-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -35,8 +41,13 @@ export default function TabsLayout() {
         options={{
           title: 'Journal',
           tabBarIcon: ({ color, focused }) => (
-            <View className={focused ? 'bg-[#3b82f6]/10 px-4 py-1 rounded-full' : ''}>
-              <Ionicons name={focused ? "calendar" : "calendar-outline"} size={22} color={color} />
+            <View className="relative">
+              <View className={focused ? 'bg-[#3b82f6]/20 px-6 py-1.5 rounded-3xl' : ''}>
+                <Ionicons name={focused ? "reorder-two" : "reorder-two-outline"} size={26} color={color} />
+              </View>
+              <View className="absolute -top-1 -right-1 bg-red-500 h-4 w-4 rounded-full items-center justify-center border-2 border-[#0A0A0A]">
+                <Text className="text-white text-[8px] font-bold">2</Text>
+              </View>
             </View>
           ),
         }}
@@ -46,7 +57,7 @@ export default function TabsLayout() {
         options={{
           title: 'Progress',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? "bar-chart" : "bar-chart-outline"} size={22} color={color} />
+            <Ionicons name={focused ? "stats-chart" : "stats-chart-outline"} size={22} color={color} />
           ),
         }}
       />
@@ -56,15 +67,6 @@ export default function TabsLayout() {
           title: 'Friends',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? "people" : "people-outline"} size={22} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="upgrade"
-        options={{
-          title: 'Upgrade',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? "star" : "star-outline"} size={22} color={color} />
           ),
         }}
       />
