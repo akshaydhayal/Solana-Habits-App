@@ -80,23 +80,25 @@ export default function HabitsScreen() {
   return (
     <Container>
       <ScrollView className="flex-1" contentContainerClassName="p-4">
-        <View className="mb-4 py-4">
-          <Text className="font-semibold text-2xl text-foreground tracking-tight">
+        <View className="mb-6 py-6">
+          <Text className="font-bold text-3xl text-white tracking-tight">
             Daily Habits
           </Text>
-          <Text className="text-muted text-sm mt-1">
-            Build consistency by checking off your habits every day.
+          <Text className="text-gray-400 text-base mt-2">
+            Small steps, remarkable progress.
           </Text>
         </View>
 
-        <Surface variant="secondary" className="mb-6 rounded-lg p-3">
-          <View className="flex-row items-center gap-2">
-            <View className="flex-1">
+        <View className="mb-8 bg-[#1a1a1a] rounded-2xl p-4 border border-white/5 shadow-sm">
+          <View className="flex-row items-center gap-3">
+            <View className="flex-1 bg-[#262626] rounded-xl px-4 py-1 border border-white/5">
               <TextField>
                 <Input
                   value={newHabitName}
                   onChangeText={setNewHabitName}
-                  placeholder="e.g. Read 10 pages..."
+                  placeholder="e.g. Morning Meditation"
+                  placeholderTextColor="#71717a"
+                  className="text-white h-12"
                   editable={!createMutation.isPending}
                   onSubmitEditing={handleAddHabit}
                   returnKeyType="done"
@@ -105,31 +107,24 @@ export default function HabitsScreen() {
             </View>
             <Button
               isIconOnly
-              variant={
-                createMutation.isPending || !newHabitName.trim()
-                  ? 'secondary'
-                  : 'primary'
-              }
-              isDisabled={createMutation.isPending || !newHabitName.trim()}
               onPress={handleAddHabit}
-              size="sm"
+              isDisabled={createMutation.isPending || !newHabitName.trim()}
+              className={`h-12 w-12 rounded-xl items-center justify-center ${
+                !newHabitName.trim() ? 'bg-zinc-800' : 'bg-[#3b82f6]'
+              }`}
             >
               {createMutation.isPending ? (
-                <Spinner size="sm" color="default" />
+                <Spinner size="sm" color="white" />
               ) : (
                 <Ionicons
                   name="add"
-                  size={20}
-                  color={
-                    createMutation.isPending || !newHabitName.trim()
-                      ? mutedColor
-                      : foregroundColor
-                  }
+                  size={24}
+                  color="white"
                 />
               )}
             </Button>
           </View>
-        </Surface>
+        </View>
 
         {isLoading && (
           <View className="items-center justify-center py-12">
@@ -139,75 +134,84 @@ export default function HabitsScreen() {
         )}
 
         {habits?.data && habits.data.length === 0 && !isLoading && (
-          <Surface
-            variant="secondary"
-            className="items-center justify-center rounded-lg py-12"
+          <View
+            className="items-center justify-center rounded-3xl py-16 bg-[#1a1a1a] border border-white/5"
           >
-            <Ionicons name="calendar-clear-outline" size={48} color={mutedColor} />
-            <Text className="mt-4 font-medium text-foreground text-lg">
-              No habits yet
+            <View className="h-20 w-20 rounded-full bg-zinc-800 items-center justify-center mb-6">
+              <Ionicons name="calendar-clear-outline" size={40} color="#71717a" />
+            </View>
+            <Text className="font-bold text-white text-xl">
+              Start your journey
             </Text>
-            <Text className="mt-1 text-muted text-sm text-center px-6">
+            <Text className="mt-2 text-gray-500 text-center px-12 leading-5">
               Establish a new routine by adding your first daily habit above.
             </Text>
-          </Surface>
+          </View>
         )}
 
         {habits?.data && habits.data.length > 0 && (
-          <View className="gap-3">
+          <View className="gap-4">
             {habits.data.map((habit: any) => {
               const todayRecord = habit.history?.find((h: any) => h.date === todayStr)
               const isCompletedToday = todayRecord?.completed ?? false
 
               return (
-                <Surface
+                <View
                   key={habit.id}
-                  variant="secondary"
-                  className={`rounded-xl p-4 border border-transparent ${isCompletedToday ? 'bg-success/10 border-success/30' : ''}`}
+                  className={`rounded-2xl p-5 border ${
+                    isCompletedToday 
+                      ? 'bg-[#1a1a1a] border-[#3b82f6]/30 shadow-lg shadow-[#3b82f6]/5' 
+                      : 'bg-[#1a1a1a] border-white/5'
+                  }`}
                 >
-                  <View className="flex-row justify-between items-center mb-4">
+                  <View className="flex-row justify-between items-start mb-6">
                     <View className="flex-1">
-                      <Text className="font-semibold text-lg text-foreground">
+                      <Text className="font-bold text-xl text-white">
                         {habit.name}
                       </Text>
                       {habit.description && (
-                        <Text className="text-muted text-sm mt-1">{habit.description}</Text>
+                        <Text className="text-gray-500 text-sm mt-1">{habit.description}</Text>
                       )}
                     </View>
-                    <Button
-                      isIconOnly
-                      variant="ghost"
+                    <Pressable
                       onPress={() => handleDeleteHabit(habit.id)}
-                      size="sm"
+                      className="p-2 rounded-lg bg-red-500/10 active:opacity-60"
                     >
                       <Ionicons
                         name="trash-outline"
                         size={18}
-                        color={dangerColor}
+                        color="#ef4444"
                       />
-                    </Button>
+                    </Pressable>
                   </View>
 
-                  <View className="flex-row justify-between items-center mt-2 border-t border-muted/20 pt-4">
-                    <Text className="text-sm font-medium text-muted">
-                      Today's Goal
-                    </Text>
+                  <View className="flex-row justify-between items-center bg-black/20 -mx-5 -mb-5 p-5 rounded-b-2xl border-t border-white/5">
+                    <View>
+                      <Text className="text-xs font-semibold text-gray-500 uppercase tracking-widest">
+                        Status
+                      </Text>
+                      <Text className={`text-sm font-medium mt-0.5 ${isCompletedToday ? 'text-[#3b82f6]' : 'text-gray-400'}`}>
+                        {isCompletedToday ? 'Completed' : 'Pending'}
+                      </Text>
+                    </View>
                     
                     <Pressable
                       onPress={() => handleToggleToday(habit)}
-                      className={`flex-row items-center gap-2 px-4 py-2 rounded-full ${isCompletedToday ? 'bg-success' : 'bg-muted/20'}`}
+                      className={`flex-row items-center gap-2 px-6 py-3 rounded-xl ${
+                        isCompletedToday ? 'bg-[#3b82f6]' : 'bg-white/5'
+                      } active:opacity-80`}
                     >
                       <Ionicons
-                        name={isCompletedToday ? "checkmark-circle" : "ellipse-outline"}
+                        name={isCompletedToday ? "checkmark-circle" : "add-circle-outline"}
                         size={20}
-                        color={isCompletedToday ? '#fff' : foregroundColor}
+                        color="white"
                       />
-                      <Text className={`font-semibold ${isCompletedToday ? 'text-white' : 'text-foreground'}`}>
-                        {isCompletedToday ? 'Completed' : 'Mark Done'}
+                      <Text className="font-bold text-white">
+                        {isCompletedToday ? 'Done' : 'Mark Done'}
                       </Text>
                     </Pressable>
                   </View>
-                </Surface>
+                </View>
               )
             })}
           </View>

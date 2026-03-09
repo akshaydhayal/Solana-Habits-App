@@ -1,27 +1,26 @@
 import { Ionicons } from '@expo/vector-icons'
 import { Button, Spinner, useThemeColor } from 'heroui-native'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 import { useSolanaSignIn } from '@/hooks/use-solana-sign-in'
 
-export function SolanaSignInButton() {
+export function SolanaSignInButton({ label = 'Connect Wallet' }: { label?: string }) {
   const { handleSignIn, isLoading } = useSolanaSignIn()
 
   return (
     <Button
       onPress={handleSignIn}
       isDisabled={isLoading}
-      variant="primary"
-      className="w-full flex-row items-center justify-center gap-2 py-4"
+      className="w-full bg-[#3b82f6] rounded-xl h-12 items-center justify-center active:opacity-80"
     >
       {isLoading ? (
-        <Spinner size="sm" color="default" />
+        <Spinner size="sm" color="white" />
       ) : (
-        <>
-          <Ionicons name="wallet-outline" size={20} color="white" />
-          <Text className="font-semibold text-white text-base">
-            Connect Wallet & Sign In
+        <View className="flex-row items-center gap-2">
+          <Ionicons name="wallet-outline" size={22} color="white" />
+          <Text className="font-bold text-white text-lg">
+            {label}
           </Text>
-        </>
+        </View>
       )}
     </Button>
   )

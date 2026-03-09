@@ -23,31 +23,29 @@ export const AppThemeProvider = ({
 }) => {
   const { theme } = useUniwind()
 
-  const isLight = useMemo(() => {
-    return theme === 'light'
-  }, [theme])
+  // FORCE DARK MODE
+  const currentTheme = 'dark'
 
-  const isDark = useMemo(() => {
-    return theme === 'dark'
-  }, [theme])
+  const isLight = false
+  const isDark = true
 
   const setTheme = useCallback((newTheme: ThemeName) => {
-    Uniwind.setTheme(newTheme)
+    Uniwind.setTheme('dark')
   }, [])
 
   const toggleTheme = useCallback(() => {
-    Uniwind.setTheme(theme === 'light' ? 'dark' : 'light')
-  }, [theme])
+    Uniwind.setTheme('dark')
+  }, [])
 
   const value = useMemo(
     () => ({
-      currentTheme: theme,
+      currentTheme,
       isLight,
       isDark,
       setTheme,
       toggleTheme,
     }),
-    [theme, isLight, isDark, setTheme, toggleTheme],
+    [currentTheme, isLight, isDark, setTheme, toggleTheme],
   )
 
   return (

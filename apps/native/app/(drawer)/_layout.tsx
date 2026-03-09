@@ -5,90 +5,76 @@ import { useThemeColor } from 'heroui-native'
 import { useCallback } from 'react'
 import { Pressable, Text } from 'react-native'
 
-import { ThemeToggle } from '@/components/theme-toggle'
 import { authClient } from '@/lib/auth-client'
 
 function DrawerLayout() {
-  const themeColorForeground = useThemeColor('foreground')
-  const themeColorBackground = useThemeColor('background')
   const { data: session } = authClient.useSession()
-
-  const renderThemeToggle = useCallback(() => <ThemeToggle />, [])
   const isFullyOnboarded = session?.user && (session.user as any).dob
 
   return (
     <Drawer
       screenOptions={{
-        headerTintColor: themeColorForeground,
-        headerStyle: { backgroundColor: themeColorBackground },
+        headerTintColor: '#FFFFFF',
+        headerStyle: { backgroundColor: '#0A0A0A' },
         headerTitleStyle: {
-          fontWeight: '600',
-          color: themeColorForeground,
+          fontWeight: 'bold',
+          fontSize: 18,
         },
-        headerRight: renderThemeToggle,
-        drawerStyle: { backgroundColor: themeColorBackground },
+        headerShadowVisible: false,
+        drawerStyle: { 
+          backgroundColor: '#0A0A0A',
+          width: 280,
+        },
+        drawerActiveTintColor: '#3b82f6',
+        drawerInactiveTintColor: '#71717a',
+        drawerLabelStyle: {
+          fontWeight: '600',
+          fontSize: 16,
+        },
       }}
     >
       <Drawer.Screen
         name="index"
         options={{
-          headerTitle: 'Home',
-          drawerLabel: ({ color, focused }) => (
-            <Text style={{ color: focused ? color : themeColorForeground }}>
-              Home
-            </Text>
-          ),
-          drawerIcon: ({ size, color, focused }) => (
-            <Ionicons
-              name="home-outline"
-              size={size}
-              color={focused ? color : themeColorForeground}
-            />
+          headerTitle: 'Dashboard',
+          drawerLabel: 'Dashboard',
+          drawerIcon: ({ size, color }) => (
+            <Ionicons name="grid-outline" size={size} color={color} />
           ),
         }}
       />
-      {/* Only show the Habits screen to users who are logged in and have finished onboarding */}
+      
       <Drawer.Screen
         name="habits"
         options={{
-          headerTitle: 'Habits Tracker',
+          headerTitle: 'My Habits',
           drawerItemStyle: isFullyOnboarded ? undefined : { display: 'none' },
-          drawerLabel: ({ color, focused }) => (
-            <Text style={{ color: focused ? color : themeColorForeground }}>
-              Habits Tracker
-            </Text>
-          ),
-          drawerIcon: ({ size, color, focused }) => (
-            <Ionicons
-              name="calendar-clear-outline"
-              size={size}
-              color={focused ? color : themeColorForeground}
-            />
+          drawerLabel: 'My Habits',
+          drawerIcon: ({ size, color }) => (
+            <Ionicons name="list-outline" size={size} color={color} />
           ),
         }}
       />
 
-      {/* Hide Tabs, AI, and Solana examples for cleaner UI production flow */}
-      <Drawer.Screen
-        name="(tabs)"
-        options={{
-          drawerItemStyle: { display: 'none' },
-          headerTitle: 'Tabs',
-        }}
-      />
       <Drawer.Screen
         name="ai"
         options={{
-          drawerItemStyle: { display: 'none' },
-          headerTitle: 'AI',
+          headerTitle: 'AI Coach',
+          drawerLabel: 'AI Coach',
+          drawerIcon: ({ size, color }) => (
+            <Ionicons name="sparkles-outline" size={size} color={color} />
+          ),
         }}
+      />
+
+      {/* Internal/HIDDEN Routes */}
+      <Drawer.Screen
+        name="(tabs)"
+        options={{ drawerItemStyle: { display: 'none' } }}
       />
       <Drawer.Screen
         name="solana"
-        options={{
-          drawerItemStyle: { display: 'none' },
-          headerTitle: 'Solana',
-        }}
+        options={{ drawerItemStyle: { display: 'none' } }}
       />
     </Drawer>
   )

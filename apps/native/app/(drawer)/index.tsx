@@ -33,8 +33,8 @@ export default function Home() {
   return (
     <Container className="space-y-6 p-6">
       <View className="mb-6 py-4">
-        <Text className="mb-2 font-bold text-4xl text-foreground">Solana Habits</Text>
-        <Text className="text-muted text-sm">Track your progress seamlessly.</Text>
+        <Text className="mb-2 font-bold text-4xl text-foreground">HabitGo</Text>
+        <Text className="text-muted text-sm">Tiny changes, remarkable results.</Text>
       </View>
 
       {needsOnboarding ? (
@@ -59,17 +59,6 @@ export default function Home() {
           </View>
         </Card>
       ) : null}
-
-      {!session?.user && (
-        <View className="mb-6">
-          <Card variant="secondary" className="p-6 items-center">
-            <Ionicons name="lock-closed-outline" size={32} color={mutedColor} className="mb-4" />
-            <Text className="text-foreground font-medium text-lg mb-2">Authentication Required</Text>
-            <Text className="text-muted text-center text-sm mb-6">Connect your Solana wallet to access your habits and private data.</Text>
-            <SolanaSignInButton />
-          </Card>
-        </View>
-      )}
 
       {session?.user && !needsOnboarding && (
         <>
@@ -126,12 +115,6 @@ export default function Home() {
             </Card.Description>
           </Card>
         </>
-      )}
-
-      {!session?.user && (
-        <View className="flex gap-6">
-          <SolanaSignInButton />
-        </View>
       )}
     </Container>
   )

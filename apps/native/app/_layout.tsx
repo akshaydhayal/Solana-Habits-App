@@ -5,12 +5,15 @@ import {
   createSolanaDevnet,
   MobileWalletProvider,
 } from '@wallet-ui/react-native-kit'
-import { Stack } from 'expo-router'
+import { Stack, useRouter, useSegments } from 'expo-router'
 import { HeroUINativeProvider } from 'heroui-native'
+import { useEffect } from 'react'
+import { ActivityIndicator, Image, View, Text } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { AppThemeProvider } from '@/contexts/app-theme-context'
+import { authClient } from '@/lib/auth-client'
 import { queryClient } from '@/utils/orpc'
 
 export const unstable_settings = {
@@ -19,15 +22,54 @@ export const unstable_settings = {
 
 const cluster = createSolanaDevnet()
 const identity = {
-  name: 'My App',
-  uri: 'https://solana.com',
+  name: 'HabitGo',
+  uri: 'https://habitgo.app',
   icon: 'favicon.png',
 }
 
-function StackLayout() {
+function LoadingScreen() {
   return (
-    <Stack screenOptions={{}}>
-      <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+    <View className="flex-1 bg-[#0a0a0a] items-center justify-center">
+      <Image 
+        source={require('../assets/logo.png')} 
+        style={{ width: 96, height: 96, borderRadius: 28 }}
+        className="mb-8 shadow-2xl" 
+        resizeMode="contain" 
+      />
+      <ActivityIndicator size="large" color="#3b82f6" />
+      <Text className="mt-4 text-gray-400 font-medium text-lg">
+        Loading app...
+      </Text>
+    </View>
+  )
+}
+
+function StackLayout() {
+  const { isPending, data: session } = authClient.useSession()
+  const segments = useSegments()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (isPending) return
+
+    const inAuthGroup = segments[0] === 'onboarding'
+    const isAuthenticated = !!session
+
+    if (!isAuthenticated && !inAuthGroup) {
+      router.replace('/onboarding')
+    } else if (isAuthenticated && inAuthGroup) {
+      router.replace('/')
+    }
+  }, [session, isPending, segments])
+
+  if (isPending) {
+    return <LoadingScreen />
+  }
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(drawer)" />
+      <Stack.Screen name="onboarding" />
       <Stack.Screen
         name="modal"
         options={{ title: 'Modal', presentation: 'modal' }}

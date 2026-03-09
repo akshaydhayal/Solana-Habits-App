@@ -85,12 +85,12 @@ export default function AIScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <View className="flex-1 px-4 py-4">
-          <View className="mb-4 py-4">
-            <Text className="font-semibold text-2xl text-foreground tracking-tight">
-              AI Chat
+          <View className="mb-6 py-6">
+            <Text className="font-bold text-3xl text-white tracking-tight">
+              HabitGo AI
             </Text>
-            <Text className="mt-1 text-muted text-sm">
-              Chat with our AI assistant
+            <Text className="mt-2 text-gray-400 text-base">
+              Your personal habit coach, powered by AI.
             </Text>
           </View>
 
@@ -100,61 +100,59 @@ export default function AIScreen() {
             showsVerticalScrollIndicator={false}
           >
             {messages.length === 0 ? (
-              <View className="flex-1 items-center justify-center py-10">
-                <Ionicons
-                  name="chatbubble-ellipses-outline"
-                  size={32}
-                  color={mutedColor}
-                />
-                <Text className="mt-3 text-muted text-sm">
-                  Ask me anything to get started
+              <View className="flex-1 items-center justify-center py-20">
+                <View className="h-20 w-20 rounded-full bg-zinc-800 items-center justify-center mb-6">
+                  <Ionicons
+                    name="chatbubble-ellipses-outline"
+                    size={36}
+                    color="#71717a"
+                  />
+                </View>
+                <Text className="font-bold text-white text-xl">
+                  Ready to chat?
+                </Text>
+                <Text className="mt-2 text-gray-500 text-center px-12 leading-5">
+                  Ask me about your habits, streaks, or tips for better consistency.
                 </Text>
               </View>
             ) : (
-              <View className="gap-2">
+              <View className="gap-4">
                 {messages.map((message) => (
-                  <Surface
+                  <View
                     key={message.id}
-                    variant={message.role === 'user' ? 'tertiary' : 'secondary'}
-                    className={`rounded-lg p-3 ${message.role === 'user' ? 'ml-10' : 'mr-10'}`}
+                    className={`max-w-[85%] rounded-2xl p-4 ${
+                      message.role === 'user' 
+                        ? 'bg-[#3b82f6] self-end' 
+                        : 'bg-zinc-800 self-start border border-white/5'
+                    }`}
                   >
-                    <Text className="mb-1 font-medium text-muted text-xs">
-                      {message.role === 'user' ? 'You' : 'AI'}
-                    </Text>
                     <View className="gap-1">
                       {message.parts.map((part, i) =>
                         part.type === 'text' ? (
                           <Text
                             key={`${message.id}-${i}`}
-                            className="text-foreground text-sm leading-relaxed"
+                            className="text-white text-[15px] leading-6"
                           >
                             {part.text}
                           </Text>
-                        ) : (
-                          <Text
-                            key={`${message.id}-${i}`}
-                            className="text-foreground text-sm leading-relaxed"
-                          >
-                            {JSON.stringify(part)}
-                          </Text>
-                        ),
+                        ) : null
                       )}
                     </View>
-                  </Surface>
+                  </View>
                 ))}
               </View>
             )}
           </ScrollView>
 
-          <Separator className="mb-3" />
-
-          <View className="flex-row items-center gap-2">
-            <View className="flex-1">
+          <View className="flex-row items-center gap-3 bg-[#1a1a1a] p-3 rounded-2xl border border-white/5 mb-2">
+            <View className="flex-1 bg-[#262626] rounded-xl px-4 py-1 border border-white/5">
               <TextField>
                 <Input
                   value={input}
                   onChangeText={setInput}
-                  placeholder="Type a message..."
+                  placeholder="Ask anything..."
+                  placeholderTextColor="#71717a"
+                  className="text-white h-12"
                   onSubmitEditing={onSubmit}
                   autoFocus
                 />
@@ -162,15 +160,16 @@ export default function AIScreen() {
             </View>
             <Button
               isIconOnly
-              variant={input.trim() ? 'primary' : 'secondary'}
               onPress={onSubmit}
               isDisabled={!input.trim()}
-              size="sm"
+              className={`h-12 w-12 rounded-xl items-center justify-center ${
+                !input.trim() ? 'bg-zinc-800' : 'bg-[#3b82f6]'
+              }`}
             >
               <Ionicons
                 name="arrow-up"
-                size={18}
-                color={input.trim() ? foregroundColor : mutedColor}
+                size={22}
+                color="white"
               />
             </Button>
           </View>
